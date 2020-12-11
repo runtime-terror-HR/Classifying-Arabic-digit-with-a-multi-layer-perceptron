@@ -1,7 +1,6 @@
 
+function run(){
 
+    let network = new Network();
 
-
-
-
-let network = new Network();
+}
