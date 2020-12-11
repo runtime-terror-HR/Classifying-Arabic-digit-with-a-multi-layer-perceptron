@@ -4,10 +4,10 @@ class Digit{
         this.value = 0;
         this.noise = false;
         this.pixels = [];
-        generate_pixels();
+        fill_pixels();
     }
 
-    generate_pixels(){
+    fill_pixels(){
 
     }
 
