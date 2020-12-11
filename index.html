@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Classifier</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" type="text/css" href="CSS/style.css" />
+
+    <script src="scripts/neuron.js"></script>
+    <script src="scripts/train.js"></script>
+    
+</head>
+<body>
+    <div class="main" >
+       
+       <input type="number" id="epochs" placeholder="200"> epochs
+       <input type="number" id="rate" placeholder="1"> learning rate
+       <div>
+           <button id="train">add layer</button>
+           <input type="number" id="num" placeholder="3"> neurons in hidden layer
+
+           <select name="activation function" id="acivation">
+            <option value="tanh">Tanh</option>
+            <option value="relu">ReLU</option>
+          </select>
+          activation function
+       </div>
+       <div> number of hidden layers or drawing </div>
+       <button>reset network</button>
+       <button id="train"> train </button>
+
+       <div id="performance">
+           performance
+
+       </div>
+
+
+        
+    </div>
+
+</body>
+
+
+</html>
