@@ -135,6 +135,7 @@ class Network{
             let tem = new Layer(n,acti, this.layers[this.layers.length-1].numberOfNeurons);
             this.layers.push(tem);
         }
+        console.log("layer added");
 
 
     }
@@ -164,9 +165,10 @@ class Network{
 
 
     train(){
+        console.log("start training");
         //add output layer
         this.add_layer(10,"softmax");
-        for (var i = 0; i < this.epochs ; i++){
+        for (var c = 0; c < this.epochs ; c++){
             for(var data in this.training_set){
                 let tem = [];
                 let layers_outputs = [];
@@ -180,19 +182,22 @@ class Network{
                 }
 
                 //weight training 
+                //error gradients arra will hold values of gradient*weight
                 let error_gradients = [];
                 let index = 0;
                 //for output layer
-                let tem = this.layers[this.layers.length-1].weight_training(null);
+                tem = this.layers[this.layers.length-1].weight_training(layers_outputs[layers_outputs.length-2], this.layers[this.layers.length-1].outputLayer_Values);
                 error_gradients.push(tem);
 
-                for (var i = this.layers - 1, index; i >= 1; i--, index++) {
-                    error_gradients = this.layers[i].weight_training(error_gradients[index]);
+                //calculating gradients errors and updating weights
+                for (var i = this.layers - 1 ; i >= 1; i--) {
+                    error_gradients = this.layers[i].weight_training(layers_outputs[i-1],error_gradients);
                     
                 }
 
             }
 
+            console.log("epoch " + c +" done");
         }
 
 

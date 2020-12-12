@@ -22,6 +22,7 @@ class Neuron{
         this.threshold;
         this.acti = acti;
         this.weights = [];
+        this.output;
         this.initilize_weights();
     }
 
@@ -44,7 +45,7 @@ class Neuron{
         for(var i = 0; i < this.input_num ; i++){
             sum += this.weights[i] * inputs[i];
         }
-        sum -= this.threshold;
+        sum += this.threshold;
         let result = 0.0;
         switch(this.acti) {
             case "relu":
@@ -53,15 +54,73 @@ class Neuron{
             case "tanh":
                 result = tanh(sum);
               break;
-            //linear then softmax applied at layer level
             case "softmax":
                 result = sum;
               break;
-
             default:
               // code block
           }
-
+          this.output = result;
           return result;
+        }
+
+
+    deri(value){
+        switch(this.acti) {
+            case "relu":
+               return value < 0? 0 : 1;
+            case "tanh":
+                return  1 - value*value;
+            default:
+              // code block
+          }
+    }
+    update_weights(inputs, error_gradients, index){
+        let new_values = [];
+        let sum = 0.0;
+        let gradient;
+
+        if(this.acti.localeCompare("softmax")!=0){
+            for(var i = 0; i < error_gradients.length ; i++){
+                sum += error_gradients[i][index];
+            }
+            gradient = deri(this.output)*sum;
+            let weight_correction;
+            for(var i =0; i < this.weights.length;i++){
+                //fix learning rate it's fixed to 1 for now
+                weight_correction = 1 * inputs[i] * gradient;
+                //save values
+                let tem = this.weights[i]*gradient;
+                new_values.push(tem);
+                //update weight
+                this.weights[i] = weight_correction + this.weights[i];
+
+            }
+            
+        } 
+        //output layer
+        else{
+            let tem;
+            for(var i = 0; i < error_gradients.length ; i++){
+                sum += error_gradients[i];
+                if(i == index ) tem = error_gradients[i];
+            }
+            let error = (this.value == index? 1 : 0) - this.output;
+            gradient = ((sum - tem)*tem)/sum * error;
+            for(var i =0; i < this.weights.length;i++){
+                //fix learning rate it's fixed to 1 for now
+                weight_correction = 1 * inputs[i] * gradient;
+                //save values
+                let tem = this.weights[i]*gradient;
+                new_values.push(tem);
+                //update weight
+                this.weights[i] = weight_correction + this.weights[i];
+
+            }
+
+
+
+        }
+
     }
 }

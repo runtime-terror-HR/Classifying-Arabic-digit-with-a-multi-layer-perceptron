@@ -13,7 +13,7 @@ class Layer{
             //activation function for the layer
             this.activation = activation;
         }
-        
+        this.outputLayer_Values = [];
         //number of inputs to the layer
         this.input = input;
         this.output_values = [];
@@ -26,20 +26,29 @@ class Layer{
         for(var i = 0; i < this.numberOfNeurons ; i++){
             var tem = this.neurons[i].activate(inputs);
             this.output_values.push(tem);
+            this.outputLayer_Values.push(tem);
             sum += Math.exp(tem);
         }
 
-        if(this.activation.localeCompare("softmax")==0){
+        if(this.activation.localeCompare("softmax") == 0){
             for(var i = 0; i < this.numberOfNeurons ; i++){
                 this.output_values[i] = Math.exp(this.output_values[i])/sum;
+                this.neurons[i].output = this.output_values[i];
             }
             
         }
         return this.output_values;
     }
 
-    weight_training(error_gradients){
-        //returns layer error_gradients
+    weight_training(inputs, error_gradients){
+        //returns layer error_gradients*weights [neuron][weight] for each neuron []
+        let new_gradients = [];
+
+        for(var i = 0; i < this.numberOfNeurons ; i++){
+            var tem = this.neurons[i].update_weights(inputs, error_gradients,i);
+            new_gradients.push(tem);
+        }
+        return new_gradients;
 
     }
 
