@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="CSS/style.css" />
 
     <script src="scripts/neuron.js"></script>
+    <script src="scripts/layer.js"></script>
     <script src="scripts/train.js"></script>
     <script src="scripts/main.js"></script>
     
@@ -17,20 +18,22 @@
 <body>
     <div class="main" >
        
-       <input type="number" id="epochs" placeholder="200"> epochs
-       <input type="number" id="rate" placeholder="1"> learning rate
+       <input type="number" id="epochs" placeholder="200" onchange="set_epoch()"> epochs
+       <input type="number" id="rate" placeholder="1" onchange="set_learningRate()"> learning rate
        <div>
-           <button id="train">add layer</button>
+           <button id="addlayer" onclick="addLayer()">add layer</button>
            <input type="number" id="num" placeholder="3"> neurons in hidden layer
 
-           <select name="activation function" id="acivation">
-            <option value="tanh">Tanh</option>
+           <select name="activation function" id="activation">
+            <option value="tanh" selected>Tanh</option>
             <option value="relu">ReLU</option>
           </select>
           activation function
        </div>
+
        <div> number of hidden layers or drawing </div>
-       <button>reset network</button>
+
+       <button id="reset" onclick="location.reload();" >reset network</button>
        <button id="train" onclick="network.train()"> train </button>
        <button id="run" onclick="run()"> run </button>
 
