@@ -27,7 +27,6 @@ class Neuron{
     }
 
     initilize_weights(){
-        
         var min = -2.4/this.input_num ;
         var max = 2.4/this.input_num ;
         this.threshold = Math.random() * (max - min) + min;
@@ -101,6 +100,7 @@ class Neuron{
         //output layer
         else{
             let tem;
+            let weight_correction;
             for(var i = 0; i < error_gradients.length ; i++){
                 sum += error_gradients[i];
                 if(i == index ) tem = error_gradients[i];

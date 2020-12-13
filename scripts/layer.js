@@ -7,6 +7,7 @@ class Layer{
 
         //not input layer
         if(input != 0){
+            console.log(this.numberOfNeurons);
             for(var i = 0; i < this.numberOfNeurons ;i++){
                 this.neurons.push(new Neuron(input, activation));
             }     

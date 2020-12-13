@@ -112,7 +112,7 @@ class Network{
         //input layer
         this.add_layer(35,"");
         //size of training data for each digit
-        this.training_data_size = 2;
+        this.training_data_size = 1;
         //all training data
         this.training_set = [];  
 
@@ -165,19 +165,21 @@ class Network{
 
 
     train(){
-        console.log("start training");
+        
         //add output layer
         this.add_layer(10,"softmax");
+        console.log("start training");
         for (var c = 0; c < this.epochs ; c++){
+            console.log("starting epoch " + c );
             for(var data in this.training_set){
                 let tem = [];
+                //[][]
                 let layers_outputs = [];
                 layers_outputs.push(data);
-
                 //activation
                 for(var i = 1; i < this.layers.length ; i++){
                     //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
-                    tem = this.layers[i].activate_layer(layers_outputs[layers_outputs.length-1]);
+                    tem = this.layers[i].activate_layer(layers_outputs[i-1]);
                     layers_outputs.push(tem);
                 }
 
@@ -194,11 +196,39 @@ class Network{
                     error_gradients = this.layers[i].weight_training(layers_outputs[i-1],error_gradients);
                     
                 }
+                console.log("iteration ");
 
             }
 
             console.log("epoch " + c +" done");
         }
+
+
+    }
+
+    test(){
+
+        var digit_test = parseInt(document.getElementById("testdigit").value);
+
+        let tem = [];
+        let layers_outputs = [];
+        layers_outputs.push(digits[digit_test]);
+        console.log(document.getElementById("testdigit").value);
+        console.log(digits[digit_test]);
+
+        //activation
+        for(var i = 1; i < this.layers.length ; i++){
+            //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
+            tem = this.layers[i].activate_layer(layers_outputs[i-1]);
+            layers_outputs.push(tem);
+            console.log(layers_outputs);
+        }
+
+        console.log(layers_outputs.length);
+        console.log("output values");
+        console.log(layers_outputs[layers_outputs.length-1]);
+        document.getElementById("output").innerHTML = Math.max(layers_outputs[layers_outputs.length-1]);
+
 
 
     }

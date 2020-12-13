@@ -18,8 +18,8 @@
 <body>
     <div class="main" >
        
-       <input type="number" id="epochs" placeholder="200" onchange="set_epoch()"> epochs
-       <input type="number" id="rate" placeholder="1" onchange="set_learningRate()"> learning rate
+       <input type="number" id="epochs" placeholder="200" > epochs
+       <input type="number" id="rate" placeholder="1" > learning rate
        <div>
            <button id="addlayer" onclick="addLayer()">add layer</button>
            <input type="number" id="num" placeholder="3"> neurons in hidden layer
@@ -34,13 +34,32 @@
        <div> number of hidden layers or drawing </div>
 
        <button id="reset" onclick="location.reload();" >reset network</button>
-       <button id="train" onclick="network.train()"> train </button>
+       <button id="train" onclick="train_network()"> train </button>
        <button id="run" onclick="run()"> run </button>
 
        <div id="performance">
            performance
 
        </div>
+       
+
+       <button id="test" onclick="network.test()">test</button>
+       <select name="test digit" id="testdigit">
+        <option value="0" selected>0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+      </select>
+
+      <div id="output"></div>
+
+
 
 
         
