@@ -154,9 +154,9 @@ class Network{
 
     generate_training_data(){
 
-        for(var n = 0; n < this.training_data_size; n++){
-            for(var i = 0; i < 10; i++){
-                this.training_set.push(new Digit(i, false)); 
+        for(var n = 0; n < 10; n++){
+            for(var i = 0; i < this.training_data_size; i++){
+                this.training_set.push(new Digit(n, false)); 
             }
         }
         
@@ -192,7 +192,7 @@ class Network{
                 let error_gradients = [];
                 let index = 0;
                 //for output layer
-                tem = this.layers[this.layers.length-1].weight_training(layers_outputs[layers_outputs.length-2], this.layers[this.layers.length-1].outputLayer_Values);
+                tem = this.layers[this.layers.length-1].weight_training(layers_outputs[layers_outputs.length-2], layers_outputs[layers_outputs.length-1]);
                 error_gradients.push(tem);
 
                 //calculating gradients errors and updating weights

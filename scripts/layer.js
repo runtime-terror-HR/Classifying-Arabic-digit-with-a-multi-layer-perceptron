@@ -15,7 +15,7 @@ class Layer{
             //activation function for the layer
             this.activation = activation;
         }
-        this.outputLayer_Values = [];
+        
         //number of inputs to the layer
         this.input = input;
         this.output_values = [];
@@ -31,7 +31,6 @@ class Layer{
             var tem = this.neurons[i].activate(inputs);
             this.output_values.push(tem);
             //console.log(" value " + tem);
-            this.outputLayer_Values.push(tem);
             this.neurons[i].output = tem;
             sum += Math.exp(tem);
 
