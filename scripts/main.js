@@ -10,9 +10,7 @@ function train_network(){
 
 function set_epoch(){
     var tem = parseInt(document.getElementById("epochs").value);
-    network.epochs = isNaN(tem)?1:tem;
-    console.log(tem);
-    console.log("num " + network.epochs);
+    network.epochs = isNaN(tem)?200:tem;
 }
 
 function set_learningRate(){

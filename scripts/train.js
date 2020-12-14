@@ -112,7 +112,7 @@ class Network{
         //input layer
         this.add_layer(35,"");
         //size of training data for each digit
-        this.training_data_size = 1;
+        this.training_data_size = 30;
         //all training data
         this.training_set = [];  
 
@@ -154,13 +154,13 @@ class Network{
 
     generate_training_data(){
 
-        for(var n = 0; n < 10; n++){
-            for(var i = 0; i < this.training_data_size; i++){
-                this.training_set.push(new Digit(n, false)); 
+        for(var n = 0; n < this.training_data_size; n++){
+            for(var i = 0; i < 10; i++){
+                this.training_set.push(new Digit(i, false)); 
             }
         }
         
-        console.log(this.training_set);
+        //console.log(this.training_set);
     }
 
 
@@ -171,20 +171,24 @@ class Network{
         console.log("start training");
         for (var c = 0; c < this.epochs ; c++){
             console.log("starting epoch " + c );
-            for(var data in this.training_set){
+
+            for(var j = 0; j < this.training_data_size*10 ; j++){
                 let tem = [];
                 //[][]
                 let layers_outputs = [];
-                layers_outputs.push(data);
+                //console.log(this.training_set[j].pixels);
+                layers_outputs.push(this.training_set[j].pixels);
+                
                 //activation
                 for(var i = 1; i < this.layers.length ; i++){
                     //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
                     tem = this.layers[i].activate_layer(layers_outputs[i-1]);
+
                     layers_outputs.push(tem);
                 }
 
                 //weight training 
-                //error gradients arra will hold values of gradient*weight
+                //error gradients array will hold values of gradient*weight
                 let error_gradients = [];
                 let index = 0;
                 //for output layer
@@ -196,7 +200,8 @@ class Network{
                     error_gradients = this.layers[i].weight_training(layers_outputs[i-1],error_gradients);
                     
                 }
-                console.log("iteration ");
+                //console.log("iteration ");
+                //console.log(layers_outputs);
 
             }
 
@@ -213,21 +218,33 @@ class Network{
         let tem = [];
         let layers_outputs = [];
         layers_outputs.push(digits[digit_test]);
-        console.log(document.getElementById("testdigit").value);
-        console.log(digits[digit_test]);
+        //console.log(document.getElementById("testdigit").value);
+        //console.log(digits[digit_test]);
 
         //activation
         for(var i = 1; i < this.layers.length ; i++){
             //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
             tem = this.layers[i].activate_layer(layers_outputs[i-1]);
             layers_outputs.push(tem);
-            console.log(layers_outputs);
+            //console.log(layers_outputs);
         }
 
-        console.log(layers_outputs.length);
+
+        console.log(layers_outputs);
         console.log("output values");
+
         console.log(layers_outputs[layers_outputs.length-1]);
-        document.getElementById("output").innerHTML = Math.max(layers_outputs[layers_outputs.length-1]);
+        let sum = 0.0;
+        let max = layers_outputs[layers_outputs.length-1][0];
+        let index = 0;
+        for(var i = 1; i < 10 ; i++){
+            sum += layers_outputs[layers_outputs.length-1][i];
+            if(layers_outputs[layers_outputs.length-1][i] > max){
+                max = layers_outputs[layers_outputs.length-1][i];
+                index = i;
+            }
+        }
+        document.getElementById("output").innerHTML = "predict  " + index + "  sum:" + sum;
 
 
 

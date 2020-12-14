@@ -45,6 +45,7 @@ class Neuron{
             sum += this.weights[i] * inputs[i];
         }
         sum += this.threshold;
+
         let result = 0.0;
         switch(this.acti) {
             case "relu":
@@ -95,18 +96,21 @@ class Neuron{
                 this.weights[i] = weight_correction + this.weights[i];
 
             }
+            this.threshold = this.threshold + 1 * this.threshold * gradient;
+
             
         } 
         //output layer
         else{
             let tem;
             let weight_correction;
+            //for softmax derivative
             for(var i = 0; i < error_gradients.length ; i++){
                 sum += error_gradients[i];
                 if(i == index ) tem = error_gradients[i];
             }
             let error = (this.value == index? 1 : 0) - this.output;
-            gradient = ((sum - tem)*tem)/sum * error;
+            gradient = ( ((sum - tem)*tem)/(sum * sum) )* error;
             for(var i =0; i < this.weights.length;i++){
                 //fix learning rate it's fixed to 1 for now
                 weight_correction = 1 * inputs[i] * gradient;
@@ -117,10 +121,9 @@ class Neuron{
                 this.weights[i] = weight_correction + this.weights[i];
 
             }
-
-
-
+            
         }
+        return new_values;
 
     }
 }

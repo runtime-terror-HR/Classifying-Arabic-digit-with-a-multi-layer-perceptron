@@ -23,18 +23,27 @@ class Layer{
 
     activate_layer(inputs){
         let sum = 0.0;
+        this.output_values = [];
+        //console.log("neurons" + this.numberOfNeurons);
         //returns output
         for(var i = 0; i < this.numberOfNeurons ; i++){
             var tem = this.neurons[i].activate(inputs);
             this.output_values.push(tem);
+            //console.log(" value " + tem);
             this.outputLayer_Values.push(tem);
+            this.neurons[i].output = tem;
             sum += Math.exp(tem);
+
         }
 
         if(this.activation.localeCompare("softmax") == 0){
+            //console.log("output layer");
             for(var i = 0; i < this.numberOfNeurons ; i++){
+
+                //console.log("sum " +sum);
                 this.output_values[i] = Math.exp(this.output_values[i])/sum;
                 this.neurons[i].output = this.output_values[i];
+
             }
             
         }
