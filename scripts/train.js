@@ -117,7 +117,7 @@ class Network{
         this.training_set = [];  
 
         this.epochs = 200;
-        this.learning_rate = 1;
+        this.learning_rate = 0.0001;
         //fill training_set wiht the training data
         this.generate_training_data();
 
@@ -132,7 +132,7 @@ class Network{
 
         }
         else{
-            let tem = new Layer(n,acti, this.layers[this.layers.length-1].numberOfNeurons);
+            let tem = new Layer(n,acti, this.layers[this.layers.length-1].numberOfNeurons, this.learning_rate);
             this.layers.push(tem);
         }
         console.log("layer added");

@@ -17,19 +17,21 @@ function tanh(value){
 
 
 class Neuron{
-    constructor(input_num, acti){
+    constructor(input_num, acti, rate){
         this.input_num = input_num;
         this.threshold;
         this.acti = acti;
         this.weights = [];
         this.output;
+        this.rate = rate;
         this.initilize_weights();
     }
 
     initilize_weights(){
         var min = -2.4/this.input_num ;
         var max = 2.4/this.input_num ;
-        this.threshold = Math.random() * (max - min) + min;
+
+        this.threshold = Math.random() * (1 + 1) - 1;
 
         for(var i = 0; i < this.input_num; i++){
 
@@ -44,7 +46,7 @@ class Neuron{
         for(var i = 0; i < this.input_num ; i++){
             sum += this.weights[i] * inputs[i];
         }
-        sum += this.threshold;
+        sum -= this.threshold;
 
         let result = 0.0;
         switch(this.acti) {
@@ -88,7 +90,7 @@ class Neuron{
             let weight_correction;
             for(var i =0; i < this.weights.length;i++){
                 //fix learning rate it's fixed to 1 for now
-                weight_correction = 1 * inputs[i] * gradient;
+                weight_correction = this.rate * inputs[i] * gradient;
                 //save values
                 let tem = this.weights[i]*gradient;
                 new_values.push(tem);
@@ -96,7 +98,7 @@ class Neuron{
                 this.weights[i] = weight_correction + this.weights[i];
 
             }
-            this.threshold = this.threshold + 1 * this.threshold * gradient;
+            this.threshold = this.threshold + this.rate * -1 * gradient;
 
             
         } 
@@ -113,7 +115,7 @@ class Neuron{
             gradient = ( ((sum - tem)*tem)/(sum * sum) )* error;
             for(var i =0; i < this.weights.length;i++){
                 //fix learning rate it's fixed to 1 for now
-                weight_correction = 1 * inputs[i] * gradient;
+                weight_correction = this.rate * inputs[i] * gradient;
                 //save values
                 let tem = this.weights[i]*gradient;
                 new_values.push(tem);
@@ -121,6 +123,7 @@ class Neuron{
                 this.weights[i] = weight_correction + this.weights[i];
 
             }
+            this.threshold = this.threshold + this.rate * -1 * gradient;
             
         }
         return new_values;

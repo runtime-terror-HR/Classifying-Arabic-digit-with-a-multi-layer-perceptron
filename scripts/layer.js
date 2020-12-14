@@ -1,15 +1,16 @@
 class Layer{
 
-    constructor(n,activation, input){
+    constructor(n,activation, input,rate){
         this.numberOfNeurons = n;
         //list of neurons in layer
         this.neurons = [];
+        this.rate = rate;
 
         //not input layer
         if(input != 0){
             console.log(this.numberOfNeurons);
             for(var i = 0; i < this.numberOfNeurons ;i++){
-                this.neurons.push(new Neuron(input, activation));
+                this.neurons.push(new Neuron(input, activation, this.rate));
             }     
             //activation function for the layer
             this.activation = activation;

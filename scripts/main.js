@@ -15,7 +15,7 @@ function set_epoch(){
 
 function set_learningRate(){
     var tem = parseInt(document.getElementById("rate").value);
-    network.learning_rate = isNaN(tem)?1:tem;
+    network.learning_rate = isNaN(tem)?0.0001:tem;
 }
 
 function addLayer(){
