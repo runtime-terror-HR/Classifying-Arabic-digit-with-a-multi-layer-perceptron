@@ -120,6 +120,7 @@ class Network{
         this.learning_rate = 0.0001;
         //fill training_set wiht the training data
         this.generate_training_data();
+        this.error = 0.0;
 
     }
 
@@ -154,9 +155,9 @@ class Network{
 
     generate_training_data(){
 
-        for(var n = 0; n < 10; n++){
-            for(var i = 0; i < this.training_data_size; i++){
-                this.training_set.push(new Digit(n, false)); 
+        for(var n = 0; n < this.training_data_size; n++){
+            for(var i = 0; i < 10; i++){
+                this.training_set.push(new Digit(i, false)); 
             }
         }
         
@@ -176,35 +177,36 @@ class Network{
                 let tem = [];
                 //[][]
                 let layers_outputs = [];
+                
                 //console.log(this.training_set[j].pixels);
                 layers_outputs.push(this.training_set[j].pixels);
                 
                 //activation
                 for(var i = 1; i < this.layers.length ; i++){
                     //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
-                    tem = this.layers[i].activate_layer(layers_outputs[i-1]);
-
+                    tem = this.layers[i].activate_layer(layers_outputs[i-1], this.training_set[j].value);
+                    //console.log(tem);
                     layers_outputs.push(tem);
                 }
-
-                //weight training 
-                //error gradients array will hold values of gradient*weight
-                let error_gradients = [];
-                let index = 0;
-                //for output layer
-                tem = this.layers[this.layers.length-1].weight_training(layers_outputs[layers_outputs.length-2], layers_outputs[layers_outputs.length-1]);
-                error_gradients.push(tem);
-
-                //calculating gradients errors and updating weights
-                for (var i = this.layers - 1 ; i >= 1; i--) {
-                    error_gradients = this.layers[i].weight_training(layers_outputs[i-1],error_gradients);
-                    
-                }
-                //console.log("iteration ");
+                this.error += this.layers[this.layers.length-1].cross_entropy;
                 //console.log(layers_outputs);
 
+                //weight training 
+                //error gradients array will hold values of gradient*weight [] []
+                let error_gradients = [];
+                //for output layer
+                error_gradients = this.layers[this.layers.length-1].weight_training(layers_outputs[layers_outputs.length-2], layers_outputs[layers_outputs.length-1], this.training_set[j].value);
+                //calculating gradients errors and updating weights for hidden layers
+                for (var i = this.layers.length - 2 ; i >= 1; i--) {
+                    error_gradients = this.layers[i].weight_training(layers_outputs[i-1],error_gradients, this.training_set[j].value);
+                }
+                //console.log(layers_outputs);
+                //console.log("iteration " + j);
+                
             }
 
+            console.log( this.error/(this.training_data_size*10));
+            this.error = 0.0;
             console.log("epoch " + c +" done");
         }
 
