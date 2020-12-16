@@ -1,0 +1,15 @@
+.controls {
+    padding-bottom: 5px;
+    margin-bottom: 30px;
+    box-shadow: 6px 6px 5px #cecdcd;
+}
+.row{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.funcLabel{
+    color: dimgray;
+    font-size: 17px;
+    /* font-weight: bold; */
+}
