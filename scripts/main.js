@@ -26,7 +26,7 @@ function addLayer() {
     // for the network graph
     networkLayer.pop();
     networkLayer.push(n);
-    networkLayer.push(35);
+    networkLayer.push(10);
     draw();
 }
 

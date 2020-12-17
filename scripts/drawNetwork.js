@@ -1,6 +1,6 @@
 // Modified from https://github.com/sinb/draw-neural-network-js 
 
-let networkLayer = [1, 35];
+let networkLayer = [35, 10];
 // networkLayer.pop();
 // window.onload = draw;
 
@@ -76,7 +76,9 @@ function draw() {
     var y = 0;
     var neuronLocationPerLayer = [];
 
+    console.log(networkLayer);
     for (numberIdx in networkLayer) {
+        console.log("n " + numberIdx);
         var thisLayerNeuronLocation = [];
         number = networkLayer[numberIdx];
         console.log("x= " + x);

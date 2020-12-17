@@ -107,29 +107,11 @@ class Neuron{
         //output layer
         else{
             let weight_correction;
-            
-            //for softmax derivative
-            //console.log("output ");
-            //console.log(error_gradients);
-
 
             for(var i = 0; i < error_gradients.length ; i++){
 
                 sum += Math.exp(error_gradients[i]);
             }
-            // for(var i = 0; i < error_gradients.length ; i++){
-            //     if(i == index ) {
-            //         console.log("add " + (error_gradients[index]*(1-error_gradients[index])));
-            //         sum += error_gradients[index]*(1-error_gradients[index]);
-            //         console.log("sum f " + sum);
-            //     }
-            //     else {
-            //         console.log("sub " + error_gradients[i]*error_gradients[index]);
-            //         sum -= error_gradients[i]*error_gradients[index];
-            //         console.log("sum s " + sum);
-            //     }
-                
-            // }
             let error = (yd == index? 1 : 0) - this.output;
             //console.log("desired output " + (yd == index? 1 : 0));
 
