@@ -1,11 +1,9 @@
-
 let network = new Network();
-
-
 
 function train_network() {
     set_epoch();
-    set_learningRate()
+    set_learningRate();
+    document.getElementById("pleaseWait").style = 'display:inline';
     network.train();
 }
 
@@ -32,4 +30,103 @@ function addLayer() {
     draw();
 }
 
+function drawTestingGrid() {
+    var parent = document.getElementById("grid");
+    var digit_test = parseInt(document.getElementById("testdigit").value);
+    var testDigit = digits[digit_test];
+    network.testingDigit = testDigit;
 
+    var e = null;
+    var counter = 0;
+    for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 5; j++) {
+            e = document.createElement("div");
+            e.className = "unit";
+            e.id = counter;
+            if (testDigit[counter] == 1) {
+                e.style.backgroundColor = "rgb(44,44,44)";      //"#2e2e2e";
+            }
+
+            parent.appendChild(e);
+            counter++;
+        }
+        e = document.createElement("br");
+        parent.appendChild(e);
+    }
+}
+
+function changeTestingDigit() {
+    var digit_test = parseInt(document.getElementById("testdigit").value);
+    var testDigit = digits[digit_test];
+    network.testingDigit = testDigit;
+
+    editGrid(testDigit);
+}
+
+function editGrid(testDigit) {
+    console.log("hello there");
+    var e = null;
+    var color = "";
+    for (let i = 0; i < 35; i++) {
+        e = document.getElementById(i);
+        if (testDigit[i] == 1) {
+            e.style.backgroundColor = "rgb(44,44,44)";
+        }
+        else if (testDigit[i] == 0) {
+            e.style.backgroundColor = "white";
+        }
+        else {
+            color = Math.floor(testDigit[i] * 10);
+            switch (color) {
+                case 8:
+                    e.style.backgroundColor = "rgb(64,64,64)";
+                    break;
+                case 7:
+                    e.style.backgroundColor = "rgb(88,88,88)";
+                    break;
+                case 6:
+                    e.style.backgroundColor = "rgb(105,105,105)";
+                    break;
+                case 5:
+                    e.style.backgroundColor = "rgb(144,144,144)";
+                    break;
+                case 4:
+                    e.style.backgroundColor = "rgb(168,168,168)";
+                    break;
+                case 3:
+                    e.style.backgroundColor = "rgb(190,190,190)";
+                    break;
+                case 2:
+                    e.style.backgroundColor = "rgb(211,211,211)";
+                    break;
+                case 1:
+                    e.style.backgroundColor = "rgb(230,230,230)";
+                    break;
+                case 0:
+                    e.style.backgroundColor = "rgb(240,240,240)";
+                    break;
+            }
+            // e.style.backgroundColor = "rgb(105,105,105)";
+        }
+    }
+}
+
+function generateRandomNoise() {
+    // network.testingDigit
+    let noiseNum = Math.floor(Math.random() * 10) + 1;
+
+    let x = 0;
+    // add noise
+    for (let i = 0; i < noiseNum; i++) {
+
+        do {
+            x = Math.floor(Math.random() * 35);
+        }
+        while (network.testingDigit[x] == 1);
+        let num = Math.random() - 0.1;
+        network.testingDigit[x] = ((num) < 0) ? 0 : num;
+    }
+
+    editGrid(network.testingDigit);
+
+}

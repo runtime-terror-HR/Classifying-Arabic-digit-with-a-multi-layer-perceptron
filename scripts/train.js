@@ -1,4 +1,3 @@
-
 const digits = [
     //digit0
     [0, 0, 0, 0, 0,
@@ -7,7 +6,8 @@ const digits = [
         0, 0, 1, 1, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit1
     [0, 0, 0, 0, 0,
         0, 0, 1, 0, 0,
@@ -15,7 +15,8 @@ const digits = [
         0, 0, 1, 0, 0,
         0, 0, 1, 0, 0,
         0, 0, 1, 0, 0,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit2
     [0, 0, 0, 0, 0,
         1, 0, 0, 1, 0,
@@ -23,7 +24,8 @@ const digits = [
         1, 0, 0, 0, 0,
         1, 0, 0, 0, 0,
         1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit3
     [0, 0, 0, 0, 0,
         1, 0, 1, 0, 1,
@@ -31,7 +33,8 @@ const digits = [
         1, 0, 0, 0, 0,
         1, 0, 0, 0, 0,
         1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit4
     [0, 0, 0, 0, 0,
         0, 1, 1, 1, 1,
@@ -39,7 +42,8 @@ const digits = [
         0, 0, 0, 1, 0,
         0, 0, 1, 0, 0,
         0, 1, 0, 0, 0,
-        0, 1, 1, 1, 1],
+        0, 1, 1, 1, 1
+    ],
     //digit5
     [0, 0, 0, 0, 0,
         0, 0, 1, 0, 0,
@@ -47,7 +51,8 @@ const digits = [
         1, 0, 0, 0, 1,
         1, 0, 0, 0, 1,
         1, 0, 0, 0, 1,
-        0, 1, 1, 1, 0],
+        0, 1, 1, 1, 0
+    ],
     //digit6
     [0, 0, 0, 0, 0,
         0, 1, 0, 0, 1,
@@ -55,7 +60,8 @@ const digits = [
         0, 0, 0, 0, 1,
         0, 0, 0, 0, 1,
         0, 0, 0, 0, 1,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit7
     [0, 0, 0, 0, 0,
         1, 0, 0, 0, 1,
@@ -63,7 +69,8 @@ const digits = [
         1, 0, 1, 0, 0,
         1, 1, 0, 0, 0,
         1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit8
     [0, 0, 0, 0, 0,
         0, 0, 0, 0, 1,
@@ -71,7 +78,8 @@ const digits = [
         0, 0, 1, 0, 1,
         0, 1, 0, 0, 1,
         1, 0, 0, 0, 1,
-        0, 0, 0, 0, 0],
+        0, 0, 0, 0, 0
+    ],
     //digit9
     [0, 0, 0, 0, 0,
         0, 0, 1, 1, 0,
@@ -79,7 +87,8 @@ const digits = [
         0, 0, 1, 1, 1,
         0, 0, 0, 0, 1,
         0, 0, 0, 0, 1,
-        0, 0, 0, 0, 0]
+        0, 0, 0, 0, 0
+    ]
 ];
 
 
@@ -100,7 +109,7 @@ class Digit {
 
             // clone the hole digit
             this.pixels = [...digits[this.value]];
-            let noiseNum = Math.floor(Math.random() * 20);
+            let noiseNum = Math.floor(Math.random() * 10) + 1;
 
             let x = 0;
             // add noise
@@ -139,6 +148,8 @@ class Network {
         this.generate_training_data();
         this.error = 0.0;
 
+        this.testingDigit = [];
+
     }
 
     add_layer(n, acti) {
@@ -148,8 +159,7 @@ class Network {
             let tem = new Layer(35, acti, 0);
             this.layers.push(tem);
 
-        }
-        else {
+        } else {
             let tem = new Layer(n, acti, this.layers[this.layers.length - 1].numberOfNeurons, this.learning_rate);
             this.layers.push(tem);
         }
@@ -188,10 +198,16 @@ class Network {
 
     train() {
 
+        step = (1 / network.epochs) * (width - ind);
+
         //add output layer
         this.add_layer(10, "softmax");
         console.log("start training");
-        for (var c = 0; c < this.epochs; c++) {
+
+
+        var c = 0;
+        let loop = () => {
+            // for (var c = 0; c < this.epochs; c++) {
             console.log("starting epoch " + c);
 
             for (var j = 0; j < this.training_data_size * 10; j++) {
@@ -226,21 +242,39 @@ class Network {
 
             }
 
-            console.log(this.error / (this.training_data_size * 10));
+            performance.push([this.error / (this.training_data_size * 10), c]);
+            // console.log(this.error / (this.training_data_size * 10));
+            // console.log(this.error / (this.training_data_size));
+
+            drawLossStep(this.error / (this.training_data_size * 10), c);
+
             this.error = 0.0;
             console.log("epoch " + c + " done");
-        }
+            c++;
 
+            if (c < this.epochs) {
+                setTimeout(loop, 1);
+            } else {
+                document.getElementById("pleaseWait").innerText = 'DONE!!';
+
+                setTimeout(() => {
+                    document.getElementById("pleaseWait").style = 'display:none';
+                }, 4000);
+            }
+
+        }; // end of the loop function   
+
+        loop();
 
     }
 
     test() {
 
-        var digit_test = parseInt(document.getElementById("testdigit").value);
+        // var digit_test = parseInt(document.getElementById("testdigit").value);
 
         let tem = [];
         let layers_outputs = [];
-        layers_outputs.push(digits[digit_test]);
+        layers_outputs.push(this.testingDigit);
         //console.log(document.getElementById("testdigit").value);
         //console.log(digits[digit_test]);
 
@@ -267,16 +301,10 @@ class Network {
                 index = i;
             }
         }
-        document.getElementById("output").innerHTML = "predict  " + index + "  sum:" + sum;
+        document.getElementById("output").innerHTML = "Predicted Number: &nbsp;&nbsp;&nbsp;" + index;   //+ "  sum:" + sum;
 
 
 
     }
-
-    update_weights() {
-
-    }
-
-
 
 }
