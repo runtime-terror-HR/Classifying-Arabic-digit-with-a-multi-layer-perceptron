@@ -20,6 +20,11 @@ html, body {
     /* font-weight: bold; */
 }
 
+#activation {
+    width: 180px;
+    height: 29px;
+}
+
 #myCanvas, #lossCanvas {
     border: 1px solid black;
     width: 100%;

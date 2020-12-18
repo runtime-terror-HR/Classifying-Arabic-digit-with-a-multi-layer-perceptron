@@ -33,7 +33,7 @@ function addLayer() {
 function drawTestingGrid() {
     var parent = document.getElementById("grid");
     var digit_test = parseInt(document.getElementById("testdigit").value);
-    var testDigit = digits[digit_test];
+    var testDigit = [...digits[digit_test]];
     network.testingDigit = testDigit;
 
     var e = null;
@@ -44,7 +44,7 @@ function drawTestingGrid() {
             e.className = "unit";
             e.id = counter;
             if (testDigit[counter] == 1) {
-                e.style.backgroundColor = "rgb(44,44,44)";      //"#2e2e2e";
+                e.style.backgroundColor = "rgb(44,44,44)";
             }
 
             parent.appendChild(e);
@@ -57,14 +57,14 @@ function drawTestingGrid() {
 
 function changeTestingDigit() {
     var digit_test = parseInt(document.getElementById("testdigit").value);
-    var testDigit = digits[digit_test];
+    var testDigit = [...digits[digit_test]];
+    console.log(testDigit);
     network.testingDigit = testDigit;
 
     editGrid(testDigit);
 }
 
 function editGrid(testDigit) {
-    console.log("hello there");
     var e = null;
     var color = "";
     for (let i = 0; i < 35; i++) {
@@ -106,7 +106,6 @@ function editGrid(testDigit) {
                     e.style.backgroundColor = "rgb(240,240,240)";
                     break;
             }
-            // e.style.backgroundColor = "rgb(105,105,105)";
         }
     }
 }

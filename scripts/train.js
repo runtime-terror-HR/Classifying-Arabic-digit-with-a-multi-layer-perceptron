@@ -243,7 +243,7 @@ class Network {
             }
 
             performance.push([this.error / (this.training_data_size * 10), c]);
-            // console.log(this.error / (this.training_data_size * 10));
+            console.log(this.error / (this.training_data_size * 10));
             // console.log(this.error / (this.training_data_size));
 
             drawLossStep(this.error / (this.training_data_size * 10), c);
