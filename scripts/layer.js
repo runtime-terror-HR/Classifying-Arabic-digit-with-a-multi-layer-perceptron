@@ -23,6 +23,7 @@ class Layer{
 
     }
 
+    //yd is the value of the tested digit
     activate_layer(inputs, yd){
         let sum = 0.0;
         this.output_values = [];
@@ -41,6 +42,7 @@ class Layer{
             //console.log("output layer");
             //calculate softmax
             this.cross_entropy = 0.0;
+            //e is the expectded output for the neuron
             var e;
             for(var i = 0; i < this.numberOfNeurons ; i++){
 
