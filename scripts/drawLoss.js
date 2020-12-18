@@ -3,17 +3,17 @@ let canvas = null;
 let ctx = null;
 let width = 0;
 let height = 0;
-let ind = 50;   // indentation
+let ind = 70;   // indentation
 let step = 0;
-let performance = [];
+let performanceArray = [];  // [[cross-entropy1, epoch1],[cross-entropy2, epoch2], ...]
 let lastPerformanceSize = 0;
 
 function drawLoss() {
     canvas = document.getElementById("lossCanvas");
     ctx = canvas.getContext("2d");
     let spaceValue = 20;
-    width = canvas.width -spaceValue;
-    height = canvas.height-spaceValue;
+    width = canvas.width - spaceValue;
+    height = canvas.height - spaceValue;
     // step = (1 / network.epochs) * (width - ind);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -63,9 +63,31 @@ function drawLoss() {
 
 }
 
+let once = true;
 function drawLossStep(loss, epochNum) {
-    console.log("hi");
-    loss = (height - ind) - (loss * 100);
-    ctx.lineTo((epochNum * step) + ind, loss);
+    // console.log("hi");
+    var loss2 = (height - ind) - (loss * 100);
+    ctx.lineTo((epochNum * step) + ind, loss2);
     ctx.stroke();
+
+    if (once) {
+        ctx.font = "15px Arial";
+        ctx.fillText("Epoch:", ind + 10, height - 30);
+        // ctx.fillText("100000", ind + 60, height - 30);
+
+        ctx.fillText("Cross-Entropy:", ind + 150, height - 30);
+        // ctx.fillText("3.7773726472382874", ind + 255, height - 30);
+        ctx.font = "10px Arial";
+
+        once = false;
+    }
+
+    ctx.clearRect(ind + 60, height - 45, 80, 20);
+    ctx.clearRect(ind + 255, height - 45, 180, 20);
+
+    ctx.font = "15px Arial";
+    ctx.fillText(epochNum + 1, ind + 60, height - 30);  // epoch
+    ctx.fillText(loss, ind + 255, height - 30); // cross-entropy
+    ctx.font = "10px Arial";
+
 }

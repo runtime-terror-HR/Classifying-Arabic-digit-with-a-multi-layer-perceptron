@@ -78,10 +78,11 @@ class Neuron{
           }
     }
 
-    update_weights(inputs, error_gradients, index, yd){
+    update_weights(inputs, error_gradients, index, yd, rate){
         let new_values = [];
         let sum = 0.0;
         let gradient;
+        this.rate = rate;
 
         //console.log("weight  " + this.weights);
         if(this.acti.localeCompare("softmax") != 0){

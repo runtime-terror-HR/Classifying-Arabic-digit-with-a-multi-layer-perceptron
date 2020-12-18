@@ -61,12 +61,13 @@ class Layer{
         return this.output_values;
     }
 
-    weight_training(inputs, error_gradients, yd){
+    weight_training(inputs, error_gradients, yd, rate){
         //returns layer error_gradients*weights [neuron][weight] for each neuron []
         let new_gradients = [];
+        this.rate = rate;
 
         for(var i = 0; i < this.numberOfNeurons ; i++){
-            var tem = this.neurons[i].update_weights(inputs, error_gradients,i, yd);
+            var tem = this.neurons[i].update_weights(inputs, error_gradients,i, yd, this.rate);
             new_gradients.push(tem);
         }
         return new_gradients;

@@ -7,14 +7,20 @@ function train_network() {
     network.train();
 }
 
+function train_network2() {
+    network.adaptiveLearning = true;    // default is false 
+    train_network();
+}
+
 function set_epoch() {
     var tem = parseInt(document.getElementById("epochs").value);
     network.epochs = isNaN(tem) ? 200 : tem;
 }
 
 function set_learningRate() {
-    var tem = parseInt(document.getElementById("rate").value);
-    network.learning_rate = isNaN(tem) ? 0.0001 : tem;
+    var tem = parseFloat(document.getElementById("rate").value);
+    network.learning_rate = isNaN(tem) ? 0.01 : tem;
+    console.log("learning_rate:  " + network.learning_rate);
 }
 
 function addLayer() {
@@ -33,7 +39,7 @@ function addLayer() {
 function drawTestingGrid() {
     var parent = document.getElementById("grid");
     var digit_test = parseInt(document.getElementById("testdigit").value);
-    var testDigit = digits[digit_test];
+    var testDigit = [...digits[digit_test]];
     network.testingDigit = testDigit;
 
     var e = null;
@@ -44,7 +50,7 @@ function drawTestingGrid() {
             e.className = "unit";
             e.id = counter;
             if (testDigit[counter] == 1) {
-                e.style.backgroundColor = "rgb(44,44,44)";      //"#2e2e2e";
+                e.style.backgroundColor = "rgb(44,44,44)";
             }
 
             parent.appendChild(e);
@@ -57,14 +63,14 @@ function drawTestingGrid() {
 
 function changeTestingDigit() {
     var digit_test = parseInt(document.getElementById("testdigit").value);
-    var testDigit = digits[digit_test];
+    var testDigit = [...digits[digit_test]];
+    console.log(testDigit);
     network.testingDigit = testDigit;
 
     editGrid(testDigit);
 }
 
 function editGrid(testDigit) {
-    console.log("hello there");
     var e = null;
     var color = "";
     for (let i = 0; i < 35; i++) {
@@ -106,7 +112,6 @@ function editGrid(testDigit) {
                     e.style.backgroundColor = "rgb(240,240,240)";
                     break;
             }
-            // e.style.backgroundColor = "rgb(105,105,105)";
         }
     }
 }
@@ -129,4 +134,16 @@ function generateRandomNoise() {
 
     editGrid(network.testingDigit);
 
+}
+
+function checkLearning() {
+    var lastIndex = performanceArray.length - 1;
+    if (performanceArray.length > 1) {
+        if ((performanceArray[lastIndex][0] - performanceArray[lastIndex - 1][0]) > 0) {
+            network.learning_rate *= 0.8;      //= network.learning_rate - 0.5 * network.learning_rate;
+        } else {
+            network.learning_rate *= 1.05;              //+= 0.01;
+        }
+    }
+    console.log("alpha = " + network.learning_rate);
 }
