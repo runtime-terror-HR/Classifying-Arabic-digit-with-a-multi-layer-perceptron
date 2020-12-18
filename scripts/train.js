@@ -143,12 +143,13 @@ class Network {
         this.training_set = [];
 
         this.epochs = 200;
-        this.learning_rate = 0.0001;
+        this.learning_rate = 0.01;
         //fill training_set wiht the training data
         this.generate_training_data();
         this.error = 0.0;
 
         this.testingDigit = [];
+        this.adaptiveLearning = false;
 
     }
 
@@ -163,22 +164,8 @@ class Network {
             let tem = new Layer(n, acti, this.layers[this.layers.length - 1].numberOfNeurons, this.learning_rate);
             this.layers.push(tem);
         }
-        console.log("layer added");
-
 
     }
-
-    // initilize_weights(n){
-    //     var tem = [];
-    //     var min = -2.4/n ;
-    //     var max = 2.4/n ;
-    //     for(var i = 0; i < n; i++){
-    //         var t = Math.random() * (max - min) + min;
-    //         console.log(t);
-    //         tem.push(t);
-    //     }
-    //     this.weights.push(tem);
-    // }
 
     generate_training_data() {
 
@@ -208,43 +195,38 @@ class Network {
         var c = 0;
         let loop = () => {
             // for (var c = 0; c < this.epochs; c++) {
-            console.log("starting epoch " + c);
 
             for (var j = 0; j < this.training_data_size * 10; j++) {
                 let tem = [];
                 //[][]
                 let layers_outputs = [];
-
-                //console.log(this.training_set[j].pixels);
                 layers_outputs.push(this.training_set[j].pixels);
 
                 //activation
                 for (var i = 1; i < this.layers.length; i++) {
                     //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
                     tem = this.layers[i].activate_layer(layers_outputs[i - 1], this.training_set[j].value);
-                    //console.log(tem);
                     layers_outputs.push(tem);
                 }
                 this.error += this.layers[this.layers.length - 1].cross_entropy;
-                //console.log(layers_outputs);
 
                 //weight training 
                 //error gradients array will hold values of gradient*weight [] []
                 let error_gradients = [];
                 //for output layer
-                error_gradients = this.layers[this.layers.length - 1].weight_training(layers_outputs[layers_outputs.length - 2], layers_outputs[layers_outputs.length - 1], this.training_set[j].value);
+                error_gradients = this.layers[this.layers.length - 1].weight_training(layers_outputs[layers_outputs.length - 2], layers_outputs[layers_outputs.length - 1], this.training_set[j].value, network.learning_rate);
                 //calculating gradients errors and updating weights for hidden layers
                 for (var i = this.layers.length - 2; i >= 1; i--) {
-                    error_gradients = this.layers[i].weight_training(layers_outputs[i - 1], error_gradients, this.training_set[j].value);
+                    error_gradients = this.layers[i].weight_training(layers_outputs[i - 1], error_gradients, this.training_set[j].value, network.learning_rate);
                 }
-                //console.log(layers_outputs);
-                //console.log("iteration " + j);
 
             }
 
-            performance.push([this.error / (this.training_data_size * 10), c]);
-            console.log(this.error / (this.training_data_size * 10));
-            // console.log(this.error / (this.training_data_size));
+            performanceArray.push([this.error / (this.training_data_size * 10), c]);
+            // console.log(this.error / (this.training_data_size * 10));
+            if (this.adaptiveLearning) {
+                checkLearning();
+            }
 
             drawLossStep(this.error / (this.training_data_size * 10), c);
 
@@ -270,27 +252,20 @@ class Network {
 
     test() {
 
-        // var digit_test = parseInt(document.getElementById("testdigit").value);
-
         let tem = [];
         let layers_outputs = [];
         layers_outputs.push(this.testingDigit);
-        //console.log(document.getElementById("testdigit").value);
-        //console.log(digits[digit_test]);
 
         //activation
         for (var i = 1; i < this.layers.length; i++) {
             //returns layer outputs , takes the output of previouse layer and weights array for corresponding layer
             tem = this.layers[i].activate_layer(layers_outputs[i - 1]);
             layers_outputs.push(tem);
-            //console.log(layers_outputs);
         }
 
-
-        console.log(layers_outputs);
         console.log("output values");
-
         console.log(layers_outputs[layers_outputs.length - 1]);
+
         let sum = 0.0;
         let max = layers_outputs[layers_outputs.length - 1][0];
         let index = 0;
@@ -301,10 +276,22 @@ class Network {
                 index = i;
             }
         }
-        document.getElementById("output").innerHTML = "Predicted Number: &nbsp;&nbsp;&nbsp;" + index;   //+ "  sum:" + sum;
 
+        document.getElementById("output").innerHTML = "Predicted Number: &nbsp;&nbsp;&nbsp;" + index;
 
+        var correctPredictedProb = document.getElementById("correctPredictedProb");
+        var wrongPredictedProb = document.getElementById("wrongPredictedProb");
+        var digit_test = parseInt(document.getElementById("testdigit").value);
 
+        correctPredictedProb.innerHTML = "Probability of " + digit_test + " = &nbsp;&nbsp;&nbsp;" + (layers_outputs[layers_outputs.length - 1][digit_test] * 100).toFixed(3) + "%";
+        wrongPredictedProb.innerHTML = "Probability of " + index + " = &nbsp;&nbsp;&nbsp;" + (layers_outputs[layers_outputs.length - 1][index] * 100).toFixed(3) + "%";
+
+        correctPredictedProb.style.display = "block";
+        if (index != digit_test) {
+            wrongPredictedProb.style.display = "block";
+        } else {
+            wrongPredictedProb.style.display = "none";
+        }
     }
 
 }

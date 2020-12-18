@@ -5,7 +5,7 @@ let width = 0;
 let height = 0;
 let ind = 70;   // indentation
 let step = 0;
-let performance = [];
+let performanceArray = [];  // [[cross-entropy1, epoch1],[cross-entropy2, epoch2], ...]
 let lastPerformanceSize = 0;
 
 function drawLoss() {
@@ -83,7 +83,7 @@ function drawLossStep(loss, epochNum) {
     }
 
     ctx.clearRect(ind + 60, height - 45, 80, 20);
-    ctx.clearRect(ind + 255, height - 45, 165, 20);
+    ctx.clearRect(ind + 255, height - 45, 180, 20);
 
     ctx.font = "15px Arial";
     ctx.fillText(epochNum + 1, ind + 60, height - 30);  // epoch

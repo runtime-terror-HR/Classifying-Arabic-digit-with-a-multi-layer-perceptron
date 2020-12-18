@@ -7,14 +7,20 @@ function train_network() {
     network.train();
 }
 
+function train_network2() {
+    network.adaptiveLearning = true;    // default is false 
+    train_network();
+}
+
 function set_epoch() {
     var tem = parseInt(document.getElementById("epochs").value);
     network.epochs = isNaN(tem) ? 200 : tem;
 }
 
 function set_learningRate() {
-    var tem = parseInt(document.getElementById("rate").value);
-    network.learning_rate = isNaN(tem) ? 0.0001 : tem;
+    var tem = parseFloat(document.getElementById("rate").value);
+    network.learning_rate = isNaN(tem) ? 0.01 : tem;
+    console.log("learning_rate:  " + network.learning_rate);
 }
 
 function addLayer() {
@@ -128,4 +134,16 @@ function generateRandomNoise() {
 
     editGrid(network.testingDigit);
 
+}
+
+function checkLearning() {
+    var lastIndex = performanceArray.length - 1;
+    if (performanceArray.length > 1) {
+        if ((performanceArray[lastIndex][0] - performanceArray[lastIndex - 1][0]) > 0) {
+            network.learning_rate *= 0.8;      //= network.learning_rate - 0.5 * network.learning_rate;
+        } else {
+            network.learning_rate *= 1.05;              //+= 0.01;
+        }
+    }
+    console.log("alpha = " + network.learning_rate);
 }

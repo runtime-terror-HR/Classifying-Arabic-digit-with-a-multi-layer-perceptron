@@ -96,3 +96,18 @@ html, body {
 #output {
     padding-top: 5px;
 }
+
+.btn{
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#correctPredictedProb {
+    margin-top: 30px;
+    margin-bottom: 5px;
+    display: none;
+}
+
+#wrongPredictedProb{
+    display: none;
+}
