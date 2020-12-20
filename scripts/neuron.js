@@ -30,7 +30,7 @@ class Neuron{
         var min = -2.4/this.input_num ;
         var max = 2.4/this.input_num ;
 
-        this.threshold = Math.random() * (1 + 1) - 1;
+        this.threshold = Math.random() * (max - min) + min;
 
         for(var i = 0; i < this.input_num; i++){
 
